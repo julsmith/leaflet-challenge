@@ -1,10 +1,10 @@
 // API link 
 var link = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
-function markerSize(mag) {
-  return mag * 30000;
+function markersize(mag) {
+  return mag * 35000;
 }
 //Define colors
-function markerColor(mag) {
+function markercolor(mag) {
   if (mag <= 1) {
       return "#ADFF2F";
   } else if (mag <= 2) {
@@ -33,8 +33,8 @@ function createFeatures(earthquakedata) {
       "</h3><hr><p>" + new Date(feature.properties.time) + "</p>" + "<p> Magnitude: " +  feature.properties.mag + "</p>")
     },     pointToLayer: function (feature, latlng) {
       return new L.circle(latlng,
-        {radius: markerSize(feature.properties.mag),
-        fillColor: markerColor(feature.properties.mag),
+        {radius: markersize(feature.properties.mag),
+        fillColor: markercolor(feature.properties.mag),
         fillOpacity: 1,
         stroke: false,
     })

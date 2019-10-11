@@ -3,7 +3,7 @@ var link = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_wee
 function markerSize(mag) {
   return mag * 30000;
 }
-//Define colors for different magnitudes 
+//Define colors
 function markerColor(mag) {
   if (mag <= 1) {
       return "#ADFF2F";
@@ -19,13 +19,13 @@ function markerColor(mag) {
       return "#FF0000";
   };
 }
-// Perform a GET request to the query URL
+// query URL and convert to json 
 d3.json(link, function(data) {
 
   createFeatures(data.features);
 });
-function createFeatures(earthquakeData) {
-  var earthquakes = L.geoJSON(earthquakeData, {
+function createFeatures(earthquakedata) {
+  var earthquakes = L.geoJSON(earthquakedata, {
 
   // Create popup 
  onEachFeature : function (feature, layer) {
@@ -44,34 +44,34 @@ function createFeatures(earthquakeData) {
   createMap(earthquakes);
 }
 function createMap(earthquakes) {
-  var satelitemap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+  var satellitemap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
     id: "mapbox.satellite",
     accessToken: API_KEY
   });
-  var darkmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+  var graymap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
     id: "mapbox.dark",
     accessToken: API_KEY
   });
-  // Define object to save base layers
-  var baseMaps = {
-    "Satelite Map": satelitemap,
-    "Dark Map": darkmap
+  // save layers
+  var basemaps = {
+    "Satellite": satellitemap,
+    "Grayscale": graymap
   };
-  var overlayMaps = {
+  var overmaps = {
     Earthquakes: earthquakes
   };
-  // Create our map, giving it the satelitemap and earthquakes layers to display on load
+  // create map
   var myMap = L.map("map", {
     center: [31,-100.0],
     zoom: 3,
-    layers: [satelitemap, earthquakes]
+    layers: [satellitemap, earthquakes]
   });
-  // Create a layer control
-  L.control.layers(baseMaps, overlayMaps, {
+  // layers 
+  L.control.layers(basemaps, overmaps, {
     collapsed: false
   }).addTo(myMap);
   var legend = L.control({position: 'bottomright'});
